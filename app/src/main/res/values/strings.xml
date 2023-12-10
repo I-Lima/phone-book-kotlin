@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Phone Book</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="keep_me_logged">Keep me logged</string>
+    <string name="login">Login</string>
+    <string name="dont_have_account_sign_up">Don\'t have account? Sign up!</string>
+    <string name="recover_your_password">Recover your password</string>
+    <string name="the_app_icon">the app icon</string>
+    <string name="from">from</string>
+    <string name="il_studio">il studio</string>
+    <string name="icon_app">icon app</string>
+</resources>
