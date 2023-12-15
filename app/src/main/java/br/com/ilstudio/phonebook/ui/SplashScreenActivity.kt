@@ -1,10 +1,11 @@
-package br.com.ilstudio.phonebook
+package br.com.ilstudio.phonebook.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import br.com.ilstudio.phonebook.R
 
 class SplashScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
