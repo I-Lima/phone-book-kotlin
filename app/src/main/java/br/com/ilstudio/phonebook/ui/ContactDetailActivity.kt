@@ -69,6 +69,9 @@ class ContactDetailActivity : AppCompatActivity() {
 
             changeEditText(false)
 
+            binding.containerButtons1.visibility = View.VISIBLE
+            binding.containerButtons2.visibility = View.GONE
+
             if(response > 0) {
                 Toast
                     .makeText(this, getString(R.string.update_ok), Toast.LENGTH_SHORT)
