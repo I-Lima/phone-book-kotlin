@@ -4,10 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import br.com.ilstudio.phonebook.Utils
 import br.com.ilstudio.phonebook.model.ContactModel
 import br.com.ilstudio.phonebook.model.UserModel
 
 class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null, 1) {
+    private val utils = Utils()
     private val sql = arrayOf(
         "CREATE TABLE users (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -18,7 +20,7 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
         "INSERT INTO users " +
                 "(username, password) " +
             "VALUES " +
-                "('admin', 'pass')",
+                "('admin', 'd74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1')",
 
         "CREATE TABLE contacts (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -52,9 +54,11 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
     fun login(username: String, password: String): Boolean {
         val db = this.readableDatabase
+        val hashPassword = utils.generateHashString(password)
+
         val c = db.rawQuery(
             "SELECT * FROM users WHERE username=? AND password=?",
-            arrayOf(username, password)
+            arrayOf(username, hashPassword)
         )
 
         var response = false
@@ -70,7 +74,10 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
         val db = this.writableDatabase
         val contextValues = ContentValues()
         contextValues.put("username", username)
-        contextValues.put("password", password)
+
+        val hashPassword = utils.generateHashString(password)
+
+        contextValues.put("password", hashPassword)
 
         val response = db.insert("users", null, contextValues)
         db.close()
