@@ -1,5 +1,6 @@
 package br.com.ilstudio.phonebook.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -29,8 +30,11 @@ class NewContactActivity : AppCompatActivity() {
             var imageId = -1
             if(id != null) imageId = id as Int
 
-            if(name.isNotEmpty()  && (email.isBlank().not() || phone.isBlank().not())) {
-                val response = db.insertContact(name = name, email = email, phone = phone, imageId = imageId)
+            val sharedPreferences = application.getSharedPreferences("login", Context.MODE_PRIVATE)
+            val userId: Int = sharedPreferences.getInt("userId", 0)
+
+            if(name.isNotEmpty()  && (email.isBlank().not() || phone.isBlank().not()) && userId > 0) {
+                val response = db.insertContact(name = name, email = email, phone = phone, imageId = imageId, userId = userId)
 
                 if(response > 0) {
                     Toast
