@@ -117,6 +117,12 @@ class ContactDetailActivity : AppCompatActivity() {
             binding.editName.setText(contactModel.name)
             binding.editEmail.setText(contactModel.email)
             binding.editPhone.setText(contactModel.phone)
+
+            if(contactModel.imageId > 0) {
+                binding.imageContact.setImageResource(contactModel.imageId)
+            } else {
+                binding.imageContact.setImageResource(R.drawable.ic_profile_default)
+            }
         }
 
         binding.buttonClose.setOnClickListener { finish() }
