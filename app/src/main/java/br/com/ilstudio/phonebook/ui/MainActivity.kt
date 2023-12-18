@@ -42,7 +42,8 @@ class MainActivity : AppCompatActivity() {
 
         loadList()
 
-        binding.textMenuName.setText(user.username)
+        binding.textMenuName.text = user.username
+        binding.imageProfile.setImageResource(user.imageId)
 
         binding.buttonLogout.setOnClickListener {
             clearData()
@@ -78,16 +79,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonMenuOpen.setOnClickListener {
             binding.menuContent.visibility = View.VISIBLE
-            binding.menuContent.animate().translationX(0F).setDuration(
+            binding.menuContent.animate().translationX(0F).duration =
                 resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-            )
         }
 
         binding.buttonMenuClose.setOnClickListener {
-            binding.menuContent.animate().translationX(-binding.menuContent.measuredWidth.toFloat())
-                .setDuration(
-                    resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-                )
+            binding.menuContent.animate().translationX(-binding.menuContent.measuredWidth.toFloat()).duration =
+                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        }
+
+        binding.buttonProfile.setOnClickListener {
+            result.launch(Intent(applicationContext, ProfileActivity::class.java))
         }
     }
 
