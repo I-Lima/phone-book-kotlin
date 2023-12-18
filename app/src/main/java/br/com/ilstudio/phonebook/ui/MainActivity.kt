@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
     private lateinit var db: DBHelper
+    private var user = UserModel()
     private var ascDesc: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,11 +42,10 @@ class MainActivity : AppCompatActivity() {
 
         loadList()
 
+        binding.textMenuName.setText(user.username)
+
         binding.buttonLogout.setOnClickListener {
-            editor.putString("username", "")
-            editor.putString("password", "")
-            editor.putInt("userId", 0)
-            editor.apply()
+            clearData()
             finish()
         }
 
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonOrder.setOnClickListener {
-            if(ascDesc) {
+            if (ascDesc) {
                 binding.buttonOrder.setImageResource(R.drawable.ic_arrow_downward)
             } else {
                 binding.buttonOrder.setImageResource(R.drawable.ic_arrow_upward)
@@ -64,13 +65,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         result = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.data != null && it.resultCode == 1) {
+            if (it.data != null && it.resultCode == 1) {
                 loadList()
-            } else if (it.data != null && it.resultCode == 0){
+            } else if (it.data != null && it.resultCode == 0) {
                 Toast
-                    .makeText(this, "Operation canceled", Toast.LENGTH_SHORT)
+                    .makeText(this, getString(R.string.operation_canceled), Toast.LENGTH_SHORT)
                     .show()
             }
+        }
+
+        binding.menuContent.animate().translationX(-700f)
+
+        binding.buttonMenuOpen.setOnClickListener {
+            binding.menuContent.visibility = View.VISIBLE
+            binding.menuContent.animate().translationX(0F).setDuration(
+                resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+            )
+        }
+
+        binding.buttonMenuClose.setOnClickListener {
+            binding.menuContent.animate().translationX(-binding.menuContent.measuredWidth.toFloat())
+                .setDuration(
+                    resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+                )
         }
     }
 
@@ -86,7 +103,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadList() {
         val username = sharedPreferences.getString("username", "")
         val password = sharedPreferences.getString("password", "")
-        var user = UserModel()
 
         if(username != null && password != null) {
             if(username.isNotEmpty() && password.isNotBlank()) {
@@ -98,5 +114,12 @@ class MainActivity : AppCompatActivity() {
 
         contactList = db.getAllContact(user.id).sortedWith(compareBy { it.name })
         placeAdapter()
+    }
+
+    private fun clearData() {
+        editor.putString("username", "")
+        editor.putString("password", "")
+        editor.putInt("userId", 0)
+        editor.apply()
     }
 }
