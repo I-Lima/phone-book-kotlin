@@ -76,4 +76,14 @@
             android:textColor="@color/black"
             />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/button_accont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/i_have_a_account"
+        android:gravity="center"
+        android:layout_marginBottom="40dp"
+        android:layout_alignParentBottom="true"
+        />
 </RelativeLayout>
