@@ -38,4 +38,9 @@
     <string name="select_an_image">Select an Image</string>
     <string name="save">Save</string>
     <string name="image_profile">image profile</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="profile">Profile</string>
+    <string name="delete_account_error">Delete account error</string>
+    <string name="operation_canceled">Operation canceled</string>
+    <string name="i_have_a_account">I have a account</string>
 </resources>
