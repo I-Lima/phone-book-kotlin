@@ -14,7 +14,8 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
         "CREATE TABLE users (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "username TEXT UNIQUE, " +
-            "password TEXT" +
+            "password TEXT, " +
+            "image_id INTEGER" +
         ")",
 
         "INSERT INTO users " +
@@ -70,13 +71,13 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
 
     /*  CRUD USERS   */
-    fun insertUser(username: String, password: String): Long {
+    fun insertUser(username: String, password: String, imageId: Int): Long {
         val db = this.writableDatabase
         val contextValues = ContentValues()
         contextValues.put("username", username)
+        contextValues.put("image_id", imageId)
 
         val hashPassword = utils.generateHashString(password)
-
         contextValues.put("password", hashPassword)
 
         val response = db.insert("users", null, contextValues)
@@ -84,11 +85,18 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
         return response
     }
 
-    fun updateUser(id: Int, username: String, password: String): Int {
+    fun updateUser(id: Int, username: String, password: String, imageId: Int): Int {
         val db = this.writableDatabase
         val contextValues = ContentValues()
         contextValues.put("username", username)
-        contextValues.put("password", password)
+        contextValues.put("image_id", imageId)
+
+        if(utils.isHexHash(password)) {
+            contextValues.put("password", password)
+        } else {
+            val hashPassword = utils.generateHashString(password)
+            contextValues.put("password", hashPassword)
+        }
 
         val response = db.update("users", contextValues, "id=?", arrayOf(id.toString()))
         db.close()
@@ -105,7 +113,6 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
     fun getUser(username: String, password: String): UserModel {
         val db = this.readableDatabase
-
         val hashPassword = utils.generateHashString(password)
 
         val c = db.rawQuery(
@@ -120,11 +127,42 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
             val idIndex = c.getColumnIndex("id")
             val usernameIndex = c.getColumnIndex("username")
             val passwordIndex = c.getColumnIndex("password")
+            val imageIdIndex = c.getColumnIndex("image_id")
 
             userModel = UserModel(
                 id = c.getInt(idIndex),
                 username = c.getString(usernameIndex),
-                password = c.getString(passwordIndex)
+                password = c.getString(passwordIndex),
+                imageId = c.getInt(imageIdIndex)
+            )
+        }
+
+        db.close()
+        return userModel
+    }
+
+    fun getUserById(id: Int): UserModel {
+        val db = this.readableDatabase
+
+        val c = db.rawQuery(
+            "SELECT * FROM users WHERE id=?",
+            arrayOf(id.toString())
+        )
+
+        var userModel = UserModel()
+
+        if(c.count == 1) {
+            c.moveToFirst()
+            val idIndex = c.getColumnIndex("id")
+            val usernameIndex = c.getColumnIndex("username")
+            val passwordIndex = c.getColumnIndex("password")
+            val imageIdIndex = c.getColumnIndex("image_id")
+
+            userModel = UserModel(
+                id = c.getInt(idIndex),
+                username = c.getString(usernameIndex),
+                password = c.getString(passwordIndex),
+                imageId = c.getInt(imageIdIndex)
             )
         }
 
