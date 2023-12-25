@@ -43,4 +43,8 @@
     <string name="delete_account_error">Delete account error</string>
     <string name="operation_canceled">Operation canceled</string>
     <string name="i_have_a_account">I have a account</string>
+    <string name="close_menu">close menu</string>
+    <string name="open_menu">open menu</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="delete_account_ok">Delete Account ok</string>
 </resources>
