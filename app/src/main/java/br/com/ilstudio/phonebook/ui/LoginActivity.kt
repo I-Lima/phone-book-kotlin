@@ -24,10 +24,15 @@ class LoginActivity : AppCompatActivity() {
         sharedPreferences = application.getSharedPreferences("login", Context.MODE_PRIVATE)
         val usernameSharedPreferences = sharedPreferences.getString("username", "")
         val passwordSharedPreferences = sharedPreferences.getString("password", "")
+        val loggedSharedPreferences = sharedPreferences.getBoolean("logged", false)
 
 
         if (usernameSharedPreferences != null && passwordSharedPreferences != null) {
-            if(usernameSharedPreferences.isNotEmpty() && passwordSharedPreferences.isNotEmpty()) {
+            if(
+                usernameSharedPreferences.isNotEmpty() &&
+                passwordSharedPreferences.isNotEmpty() &&
+                loggedSharedPreferences
+                ) {
                 startActivity(Intent(this, MainActivity::class.java))
             }
         }
@@ -48,12 +53,11 @@ class LoginActivity : AppCompatActivity() {
             val response = db.login(username, password)
 
             if(response) {
-                if(logged) {
-                    val editor: SharedPreferences.Editor = sharedPreferences.edit()
-                    editor.putString("username", username)
-                    editor.putString("password", password)
-                    editor.apply()
-                }
+                val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                editor.putString("username", username)
+                editor.putString("password", password)
+                editor.putBoolean("logged", logged)
+                editor.apply()
 
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()

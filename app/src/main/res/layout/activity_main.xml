@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_constants"
-        android:layout_width="match_parent"
+    tools:context=".ui.MainActivity"
+    >
+    <ImageView
+        android:id="@+id/button_menu_open"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button_add"
+        android:src="@drawable/ic_menu"
+        android:padding="8dp"
+        android:background="@color/blue"
+        android:layout_margin="12dp"
         android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:contentDescription="@string/open_menu"
         />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/button_menu_open"
+        android:layout_above="@id/button_add"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_view_constants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </ScrollView>
+
+    <ImageView
         android:id="@+id/button_order"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,23 +42,12 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:src="@drawable/ic_arrow_downward"
-        android:backgroundTint="@color/blue"
+        android:background="@color/blue"
+        android:padding="16dp"
         android:contentDescription="@string/arrow_downward"
         />
 
-    <Button
-        android:id="@+id/button_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:text="@string/logout"
-        android:textSize="20sp"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/black"
-        />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageView
         android:id="@+id/button_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,8 +57,86 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/blue"
+        android:background="@color/blue"
         android:src="@drawable/ic_add"
+        android:padding="16dp"
         android:contentDescription="@string/plus"
         />
+
+    <RelativeLayout
+        android:id="@+id/menu_content"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="24dp"
+        android:background="@color/blue"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:id="@+id/button_menu_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back"
+            android:background="@drawable/ic_arrow_back"
+            android:layout_gravity="end"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/close_menu"
+            />
+
+        <ImageView
+            android:id="@+id/image_profile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_profile_default"
+            android:layout_below="@id/button_menu_close"
+            android:layout_marginStart="12dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/person_icon"
+            />
+
+        <TextView
+            android:id="@+id/text_menu_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="200dp"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="40dp"
+            android:textStyle="bold"
+            android:layout_below="@id/image_profile"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:id="@+id/button_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:layout_below="@id/text_menu_name"
+            app:drawableStartCompat="@drawable/ic_manage_accounts"
+            android:layout_marginStart="8dp"
+            android:drawablePadding="10dp"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/button_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:drawablePadding="10dp"
+            android:layout_alignParentBottom="true"
+            app:drawableStartCompat="@drawable/ic_exit"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
 </RelativeLayout>

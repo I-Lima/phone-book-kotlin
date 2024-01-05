@@ -4,21 +4,24 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import br.com.ilstudio.phonebook.Utils
 import br.com.ilstudio.phonebook.model.ContactModel
 import br.com.ilstudio.phonebook.model.UserModel
 
 class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null, 1) {
+    private val utils = Utils()
     private val sql = arrayOf(
         "CREATE TABLE users (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "username TEXT UNIQUE, " +
-            "password TEXT" +
+            "password TEXT, " +
+            "image_id INTEGER" +
         ")",
 
         "INSERT INTO users " +
                 "(username, password) " +
             "VALUES " +
-                "('admin', 'pass')",
+                "('admin', 'd74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1')",
 
         "CREATE TABLE contacts (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -52,9 +55,11 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
     fun login(username: String, password: String): Boolean {
         val db = this.readableDatabase
+        val hashPassword = utils.generateHashString(password)
+
         val c = db.rawQuery(
             "SELECT * FROM users WHERE username=? AND password=?",
-            arrayOf(username, password)
+            arrayOf(username, hashPassword)
         )
 
         var response = false
@@ -66,22 +71,32 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
 
     /*  CRUD USERS   */
-    fun insertUser(username: String, password: String): Long {
+    fun insertUser(username: String, password: String, imageId: Int): Long {
         val db = this.writableDatabase
         val contextValues = ContentValues()
         contextValues.put("username", username)
-        contextValues.put("password", password)
+        contextValues.put("image_id", imageId)
+
+        val hashPassword = utils.generateHashString(password)
+        contextValues.put("password", hashPassword)
 
         val response = db.insert("users", null, contextValues)
         db.close()
         return response
     }
 
-    fun updateUser(id: Int, username: String, password: String): Int {
+    fun updateUser(id: Int, username: String, password: String, imageId: Int): Int {
         val db = this.writableDatabase
         val contextValues = ContentValues()
         contextValues.put("username", username)
-        contextValues.put("password", password)
+        contextValues.put("image_id", imageId)
+
+        if(utils.isHexHash(password)) {
+            contextValues.put("password", password)
+        } else {
+            val hashPassword = utils.generateHashString(password)
+            contextValues.put("password", hashPassword)
+        }
 
         val response = db.update("users", contextValues, "id=?", arrayOf(id.toString()))
         db.close()
@@ -98,9 +113,16 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
     fun getUser(username: String, password: String): UserModel {
         val db = this.readableDatabase
+
+        val hashPassword = if(utils.isHexHash(password)) {
+            password
+        } else {
+            utils.generateHashString(password)
+        }
+
         val c = db.rawQuery(
             "SELECT * FROM users WHERE username=? AND password=?",
-            arrayOf(username, password)
+            arrayOf(username, hashPassword)
         )
 
         var userModel = UserModel()
@@ -110,11 +132,42 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
             val idIndex = c.getColumnIndex("id")
             val usernameIndex = c.getColumnIndex("username")
             val passwordIndex = c.getColumnIndex("password")
+            val imageIdIndex = c.getColumnIndex("image_id")
 
             userModel = UserModel(
                 id = c.getInt(idIndex),
                 username = c.getString(usernameIndex),
-                password = c.getString(passwordIndex)
+                password = c.getString(passwordIndex),
+                imageId = c.getInt(imageIdIndex)
+            )
+        }
+
+        db.close()
+        return userModel
+    }
+
+    fun getUserById(id: Int): UserModel {
+        val db = this.readableDatabase
+
+        val c = db.rawQuery(
+            "SELECT * FROM users WHERE id=?",
+            arrayOf(id.toString())
+        )
+
+        var userModel = UserModel()
+
+        if(c.count == 1) {
+            c.moveToFirst()
+            val idIndex = c.getColumnIndex("id")
+            val usernameIndex = c.getColumnIndex("username")
+            val passwordIndex = c.getColumnIndex("password")
+            val imageIdIndex = c.getColumnIndex("image_id")
+
+            userModel = UserModel(
+                id = c.getInt(idIndex),
+                username = c.getString(usernameIndex),
+                password = c.getString(passwordIndex),
+                imageId = c.getInt(imageIdIndex)
             )
         }
 
