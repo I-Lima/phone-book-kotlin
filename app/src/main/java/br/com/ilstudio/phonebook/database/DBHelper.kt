@@ -113,7 +113,12 @@ class DBHelper(context: Context): SQLiteOpenHelper(context, "database.db", null,
 
     fun getUser(username: String, password: String): UserModel {
         val db = this.readableDatabase
-        val hashPassword = utils.generateHashString(password)
+
+        val hashPassword = if(utils.isHexHash(password)) {
+            password
+        } else {
+            utils.generateHashString(password)
+        }
 
         val c = db.rawQuery(
             "SELECT * FROM users WHERE username=? AND password=?",
