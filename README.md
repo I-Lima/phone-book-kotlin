@@ -5,13 +5,14 @@
 ## Introdução
 
 Projeto para gerenciar contatos, podendo ter inúmeros usuários de acesso cadastrados e ter os contatos separados por usuários.
-
-<img src="./public/Screenshot_20240105_143315.png" width="120" />
-<img src="./public/Screenshot_20240105_143425.png" width="120" />
-<img src="./public/Screenshot_20240105_143451.png" width="120" />
-<img src="./public/Screenshot_20240105_143536.png" width="120" />
-<img src="./public/Screenshot_20240105_143619.png" width="120" />
-<img src="./public/Screenshot_20240105_143937.png" width="120" />
+<div>
+  <img src="./public/Screenshot_20240105_143315.png" width="80" />
+  <img src="./public/Screenshot_20240105_143425.png" width="80" />
+  <img src="./public/Screenshot_20240105_143451.png" width="80" />
+  <img src="./public/Screenshot_20240105_143536.png" width="80" />
+  <img src="./public/Screenshot_20240105_143619.png" width="80" />
+  <img src="./public/Screenshot_20240105_143937.png" width="80" />
+</div>
 
 ## Objetivo
 
