@@ -54,11 +54,7 @@ class ProfileActivity : AppCompatActivity() {
             binding.imageProfile.setImageResource(R.drawable.ic_profile_default)
         }
 
-        binding.buttonClose.setOnClickListener {
-            i.putExtra("userImageId", imageId)
-            setResult(1, i)
-            finish()
-        }
+        binding.buttonClose.setOnClickListener {finish()}
 
         binding.imageProfile.setOnClickListener {
             if(binding.imageProfile.isFocusable) {
@@ -123,6 +119,8 @@ class ProfileActivity : AppCompatActivity() {
                 password = userPass,
                 imageId = userImgId!!
             )
+
+            saveTheNewValues(nameUser, userPass)
             imageId = userImgId
 
             changeEditText(false)
@@ -166,6 +164,12 @@ class ProfileActivity : AppCompatActivity() {
         binding.editUsername.isEnabled = status
         binding.editPassword.isEnabled = status
         binding.imageProfile.isFocusable = status
+    }
+
+    private fun saveTheNewValues(username: String, password: String) {
+        editor.putString("username", username)
+        editor.putString("password", password)
+        editor.apply()
     }
 
     private fun getUser(id: Int) {
