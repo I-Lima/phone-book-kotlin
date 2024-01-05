@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import br.com.ilstudio.phonebook.R
+import br.com.ilstudio.phonebook.Utils
 import br.com.ilstudio.phonebook.adapter.ContactListAdapter
 import br.com.ilstudio.phonebook.adapter.listener.ContactOnClickListener
 import br.com.ilstudio.phonebook.database.DBHelper
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: DBHelper
     private var user = UserModel()
     private var ascDesc: Boolean = true
+    private var imageId: Int? = -1
+    private val utils = Utils()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +43,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.recycleViewConstants.layoutManager = LinearLayoutManager(applicationContext)
 
-        loadList()
-
-        binding.textMenuName.text = user.username
-        binding.imageProfile.setImageResource(user.imageId)
-
         binding.buttonLogout.setOnClickListener {
-            clearData()
+            utils.clearData(editor)
             finish()
         }
 
@@ -68,6 +66,11 @@ class MainActivity : AppCompatActivity() {
         result = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.data != null && it.resultCode == 1) {
                 loadList()
+
+                if(it.data?.extras != null) {
+                    imageId = it.data?.getIntExtra("userImageId", 0)!!
+                    binding.imageProfile.setImageResource(imageId!!)
+                }
             } else if (it.data != null && it.resultCode == 0) {
                 Toast
                     .makeText(this, getString(R.string.operation_canceled), Toast.LENGTH_SHORT)
@@ -89,10 +92,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonProfile.setOnClickListener {
-            result.launch(Intent(applicationContext, ProfileActivity::class.java))
+            val intent = Intent(applicationContext, ProfileActivity::class.java)
+            intent.putExtra("id", user.id)
+            intent.putExtra("imageId", user.imageId)
+            result.launch(intent)
         }
     }
 
+
+    override fun onResume() {
+        super.onResume()
+
+        getUser()
+        loadList()
+
+        binding.textMenuName.text = user.username
+
+        if(user.imageId > 0) {
+            binding.imageProfile.setImageResource(user.imageId)
+        } else {
+            binding.imageProfile.setImageResource(R.drawable.ic_profile_default)
+        }
+    }
     private fun placeAdapter() {
         adapter = ContactListAdapter(contactList, ContactOnClickListener {contact ->
             val intent = Intent(applicationContext, ContactDetailActivity::class.java)
@@ -102,7 +123,7 @@ class MainActivity : AppCompatActivity() {
         binding.recycleViewConstants.adapter = adapter
     }
 
-    private fun loadList() {
+    private fun getUser() {
         val username = sharedPreferences.getString("username", "")
         val password = sharedPreferences.getString("password", "")
 
@@ -113,15 +134,9 @@ class MainActivity : AppCompatActivity() {
                 editor.apply()
             }
         }
-
+    }
+    private fun loadList() {
         contactList = db.getAllContact(user.id).sortedWith(compareBy { it.name })
         placeAdapter()
-    }
-
-    private fun clearData() {
-        editor.putString("username", "")
-        editor.putString("password", "")
-        editor.putInt("userId", 0)
-        editor.apply()
     }
 }
