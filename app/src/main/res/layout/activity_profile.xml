@@ -26,10 +26,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
+            android:layout_marginStart="100dp"
             android:fontFamily="sans-serif-medium"
             android:gravity="start"
-            android:text="@string/contact_detail"
+            android:text="@string/profile"
             android:textColor="@color/black"
             android:textSize="32sp"
             />
