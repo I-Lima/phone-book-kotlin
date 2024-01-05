@@ -5,13 +5,14 @@
 ## Introduction
 
 Project to manage contacts, allowing numerous registered access users and contacts separated by users.
-
-<img src="./public/Screenshot_20240105_143315.png" width="120" />
-<img src="./public/Screenshot_20240105_143425.png" width="120" />
-<img src="./public/Screenshot_20240105_143451.png" width="120" />
-<img src="./public/Screenshot_20240105_143536.png" width="120" />
-<img src="./public/Screenshot_20240105_143619.png" width="120" />
-<img src="./public/Screenshot_20240105_143937.png" width="120" />
+<div>
+  <img src="./public/Screenshot_20240105_143315.png" width="80" />
+  <img src="./public/Screenshot_20240105_143425.png" width="80" />
+  <img src="./public/Screenshot_20240105_143451.png" width="80" />
+  <img src="./public/Screenshot_20240105_143536.png" width="80" />
+  <img src="./public/Screenshot_20240105_143619.png" width="80" />
+  <img src="./public/Screenshot_20240105_143937.png" width="80" />
+</div>
 
 ## Objective
 
